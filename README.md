@@ -1,6 +1,6 @@
 # fuseki-thor
 
-Docker image for [Thor](https://github.com/Abbe98/thor).
+Docker image for [Thor](https://github.com/Abbe98/thor).  
 An interactive SPARQL Editor for K-samsök.
 
 ## Usage (local)
