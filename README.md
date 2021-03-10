@@ -22,3 +22,6 @@ docker run -p 80:80 thor
 ``` bash
 docker stop thor
 ```
+
+### HC Endpoint
+http://63.33.68.17:3030/heritage-connector/sparql
