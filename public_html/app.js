@@ -252,7 +252,8 @@ function render() {
 
 
 function setupQueryLibrary() {
-  fetch('queries.json').then(response => {
+  // fetch('queries.json').then(response => {
+  fetch('https://raw.githubusercontent.com/TheScienceMuseum/thor-docker/main/public_html/queries.json').then(response => {
     return response.json();
   }).then(data => {
     data.forEach(query => {

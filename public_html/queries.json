@@ -1,6 +1,6 @@
 [
     {
-      "title": "HC Sample Query",
+      "title": "Heritage Connector Sample Query",
       "tags": ["tutorial"],
       "body": "PREFIX soch: <http://kulturarvsdata.se/ksamsok#>\nPREFIX text: <http://jena.apache.org/text#>\n\nSELECT ?item ?label WHERE {\n  # If you are querying entities always limit your query to triples of the entity type\n  # this way you avoid running your queries over other SOCH classes such as Context and ItemDescription\n  ?item a soch:Entity .\n  \n  # If you can limit your result even more before preforming a text or spatial search do so\n  ?item soch:itemType <http://kulturarvsdata.se/resurser/EntityType#object>;\n  \n    # Now let's not use SPARQL's built in REGEX() function to make free text searches\n    # instead we can use a text search property function which runs on a prebuilt text index\n    text:query (soch:itemLabel 'Fisk') ;\n      soch:itemLabel ?label\n}\n"
     }
