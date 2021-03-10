@@ -16,6 +16,11 @@ docker build --no-cache . -t thor
 ``` bash
 docker run -p 80:80 thor
 ```
+or to run as a demon
+
+``` bash
+docker run -d --restart=always -p 80:80 thor
+```
 
 ### To stop:
 
