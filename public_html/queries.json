@@ -2,6 +2,12 @@
     {
       "title": "Heritage Connector Sample Query",
       "tags": ["tutorial"],
+      "body": "PREFIX sdo: <https://schema.org/>\nSELECT ?label (COUNT(?label) as ?count) WHERE{?s sdo:isPartOf ?label.} GROUP BY ?label ORDER BY DESC(?count)"
+    },
+    {
+      "title": "Heritage Connector Test",
+      "tags": ["tutorial"],
       "body": "SELECT * WHERE{?s ?p ?o.} LIMIT 100"
     }
 ]
+
