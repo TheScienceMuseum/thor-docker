@@ -8,6 +8,11 @@
       "title": "Heritage Connector Test",
       "tags": ["tutorial"],
       "body": "SELECT * WHERE{?s ?p ?o.} LIMIT 100"
+    },
+    {
+      "title": "Get people/organisations/objects with a link to Wikidata",
+      "tags": ["tutorial"],
+      "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#> \n PREFIX wdt:  <http://www.wikidata.org/prop/direct/> \n PREFIX wd:  <http://www.wikidata.org/entity/> \n PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n PREFIX skos: <http://www.w3.org/2004/02/skos/core#> \n \n SELECT ?item ?itemLabel ?wdItem ?wdItemlabel WHERE { \n   ?item skos:hasTopConcept 'PERSON'. \n   ?item owl:sameAs ?wdItem. \n   ?item rdfs:label ?itemLabel. \n   \n   SERVICE <https://query.wikidata.org/sparql> { \n     ?wdItem rdfs:label ?wdItemlabel. \n     FILTER(LANG(?wdItemlabel) = \"en\"). \n   }  \n } LIMIT 100 "
     }
 ]
 
