@@ -1,32 +1,27 @@
 [
     {
-      "title": "Heritage Connector Sample Query",
-      "tags": ["tutorial"],
-      "body": "PREFIX sdo: <https://schema.org/>\nSELECT ?label (COUNT(?label) as ?count) WHERE{?s sdo:isPartOf ?label.} GROUP BY ?label ORDER BY DESC(?count)"
-    },
-    {
-      "title": "Heritage Connector Test",
+      "title": "Get triples from the Collection Knowledge Graph",
       "tags": ["tutorial"],
       "body": "SELECT * WHERE{?s ?p ?o.} LIMIT 100"
     },
     {
       "title": "Get People/Organisations/Objects with a link to Wikidata",
-      "tags": ["tutorial"],
+      "tags": ["wikidata"],
       "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#> \n PREFIX wdt:  <http://www.wikidata.org/prop/direct/> \n PREFIX wd:  <http://www.wikidata.org/entity/> \n PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n PREFIX skos: <http://www.w3.org/2004/02/skos/core#> \n \n SELECT ?item ?itemLabel ?wdItem ?wdItemlabel WHERE { \n  # Change PERSON below to OBJECT or ORGANISATION \n  ?item skos:hasTopConcept 'PERSON'. \n   ?item owl:sameAs ?wdItem. \n   ?item rdfs:label ?itemLabel. \n   \n   SERVICE <https://query.wikidata.org/sparql> { \n     ?wdItem rdfs:label ?wdItemlabel. \n     FILTER(LANG(?wdItemlabel) = \"en\"). \n   }  \n } LIMIT 100 "
     },
     {
       "title": "Bringing a Wikidata property (political party membership) into the collection",
-      "tags": ["tutorial"],
+      "tags": ["wikidata"],
       "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n PREFIX wdt:  <http://www.wikidata.org/prop/direct/>\n PREFIX wd:  <http://www.wikidata.org/entity/>\n PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n \n SELECT ?item ?itemLabel ?wdItem ?wdItemlabel ?wdPoliticalParty ?wdPoliticalPartyLabel WHERE {\n   ?item skos:hasTopConcept 'PERSON'.\n   ?item owl:sameAs ?wdItem.\n   ?item rdfs:label ?itemLabel.\n   \n   SERVICE <https://query.wikidata.org/sparql> {\n     ?wdItem rdfs:label ?wdItemlabel.\n     FILTER(LANG(?wdItemlabel) = \"en\").\n     OPTIONAL{ \n       ?wdItem wdt:P102 ?wdPoliticalParty.\n       ?wdPoliticalParty rdfs:label ?wdPoliticalPartyLabel.\n       FILTER(LANG(?wdPoliticalPartyLabel) = \"en\").\n     }.\n   } \n    \n } LIMIT 200 "
     },
     {
       "title": "Get the number of Objects linked to Wikidata, by (Internal) Collection",
-      "tags": ["tutorial"],
+      "tags": ["wikidata"],
       "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n PREFIX wdt:  <http://www.wikidata.org/prop/direct/>\n PREFIX wd:  <http://www.wikidata.org/entity/>\n PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n PREFIX sdo: <https://schema.org/>\n \n SELECT ?collection (COUNT(?item) AS ?count) WHERE {\n   ?item skos:hasTopConcept 'OBJECT'.\n   ?item owl:sameAs ?wdItem.\n   ?item sdo:isPartOf ?collection.\n } GROUP BY ?collection ORDER BY DESC(?count)"
     },
     {
       "title": "Find occurrences of people in the SMG collection in other National Museum collections",
-      "tags": ["tutorial"],
+      "tags": ["other collections"],
       "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n PREFIX wdt:  <http://www.wikidata.org/prop/direct/>\n PREFIX wd:  <http://www.wikidata.org/entity/>\n PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n PREFIX sdo: <https://schema.org/>\n SELECT * WHERE {\n   ?item skos:hasTopConcept \"PERSON\".\n   ?item rdfs:label ?itemLabel.\n   ?item owl:sameAs ?wdItem.\n     \n   SERVICE <https://query.wikidata.org/sparql> {    \n     #OPTIONAL{ ?wdItem wdt:P18 ?thumbnail }.\n     # V&A \n     OPTIONAL {\n      VALUES ?vaIDs { wdt:P3929 wdt:P6764  }.\n      ?wdItem ?vaIDs ?vaID.\n     }\n     \n     # Tate \n     OPTIONAL {\n       VALUES ?tateIDs {wdt:P2741}.\n       ?wdItem ?tateIDs ?tateID.\n     }\n     \n     # BFI\n     OPTIONAL {\n       VALUES ?bfiIDs {wdt:P2703 wdt:P4326 wdt:P4438}.\n       ?wdItem ?bfiIDs ?bfiID.\n     }\n     \n     # British Museum\n     OPTIONAL {\n       VALUES ?bmIDs {wdt:P8565 wdt:P1711}.\n       ?wdItem ?bmIDs ?britishMuseumID.\n       }\n        \n     # National Portrait Gallery\n     OPTIONAL {\n       VALUES ?npgIDs {wdt:P1816 wdt:P9144}\n       ?wdItem ?npgIDs ?nationalportraitID.\n       }\n   } \n }"
     }
 ]
