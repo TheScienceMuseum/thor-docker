@@ -42,5 +42,3 @@
 | Materials | SDO.material | [WDT.P186](https://www.wikidata.org/wiki/Property:P186) | |
 | Date made| SDO.dateCreated | [WDT.P571](https://www.wikidata.org/wiki/Property:P571) | |
 | SMG Category | SDO.isPartOf | | |
-
-
