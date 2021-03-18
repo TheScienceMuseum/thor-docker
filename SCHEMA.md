@@ -9,9 +9,9 @@
 | Family Name | FOAF.familyName | [WDT.P734](https://www.wikidata.org/wiki/Property:P734) | |
 | Gender | SDO.gender | [WDT.P21](https://www.wikidata.org/wiki/Property:P21) |
 | Birth Date | SDO.birthDate | [WDT.P569](https://www.wikidata.org/wiki/Property:P569) | |
-| Death Date | SDO.birthDate | [WDT.P570](https://www.wikidata.org/wiki/Property:P570) | |
-| Birth Pace | SDO.birthDate | [WDT.P19](https://www.wikidata.org/wiki/Property:P19) | |
-| Death Place | SDO.birthDate | [WDT.P20](https://www.wikidata.org/wiki/Property:P20) | |
+| Death Date | SDO.deathDate | [WDT.P570](https://www.wikidata.org/wiki/Property:P570) | |
+| Birth Pace | SDO.birthPlace | [WDT.P19](https://www.wikidata.org/wiki/Property:P19) | |
+| Death Place | SDO.deathPlace | [WDT.P20](https://www.wikidata.org/wiki/Property:P20) | |
 | Nationality | SDO.nationality | | |
 | Occupation | SDO.hasOccupation | [WDT.P106](https://www.wikidata.org/wiki/Property:P106) | |
 | Biography | XSD.description | | |
