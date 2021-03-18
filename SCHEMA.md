@@ -1,4 +1,4 @@
-# Heritage Connector Schemas
+# Heritage Connector Schema
 
 ## Person
 
