@@ -1,7 +1,7 @@
 # fuseki-thor
 
 Docker image for [Thor](https://github.com/Abbe98/thor).  
-An interactive SPARQL Editor for K-samsök.
+An interactive SPARQL Editor for K-samsök (forked for use with Heritage Connector)
 
 ## Usage (local)
 
