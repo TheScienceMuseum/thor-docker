@@ -298,6 +298,9 @@ function closeAndSetEndpointModal() {
   window.location.hash = '';
 }
 
+// Manually set / overide the endpoint for use woith Heritage Connector Fuseki instance
+localStorage.setItem('endpoint', 'http://63.33.68.17:8080');
+
 if (localStorage.getItem('endpoint') !== null) {
   YASQE.defaults.sparql.endpoint = localStorage.getItem('endpoint');
 } else {
