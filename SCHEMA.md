@@ -18,7 +18,7 @@ Used to express links/terms discocvered by NER (Named Entity Recognition) in a r
 | hc.entityORG | Organistion | An Organistion identified by NER | 
 | hc.entityNORP | | | 
 | hc.entityFAC | Facility | A building or facility identified by NER | 
-| hc.entityLOC |  | A geographical location or country identified by NER | 
+| hc.entityLOC | Place | A geographical location or country identified by NER | 
 | hc.entityOBJECT | Object | | 
 | hc.entityLANGUAGE | Language | A language identified by NER | 
 | hc.entityDATE | Date | A date or year identified by NER | 
