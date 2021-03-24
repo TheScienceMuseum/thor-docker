@@ -27,7 +27,7 @@
     {
       "title": "List entities",
       "tags": ["NER"],
-      "body": "PREFIX hc: <http://www.heritageconnector.org/RDF/>\n\nSELECT * WHERE {\n  {SELECT DISTINCT ?p WHERE{\n     # add one of PERSON, ORG, OBJECT, DATE, NORP, FAC, LOC, LANGUAGE, EVENT to the end of the URL below\n   FILTER(STRSTARTS(STR(?p), \"http://www.heritageconnector.org/RDF/entity\")).\n   ?s ?p ?o\n    }\n  }\n  ?subject ?p ?entity \n  # this line returns all non-linked (non-URL) entities\n  #FILTER(!STRSTARTS(STR(?entity), \"http\")).\n  # OR, this line returns all linked (URL) entities\n  FILTER(STRSTARTS(STR(?entity), \"http\")).\n\n# use the LIMIT and OFFSET numbers below to control page size and page number\n} ORDER BY ?entity LIMIT 500 OFFSET 1000"
+      "body": "PREFIX hc: <http://www.heritageconnector.org/RDF/>\n\nSELECT * WHERE {\n  {SELECT DISTINCT ?p WHERE{\n     # add one of PERSON, ORG, OBJECT, DATE, NORP, FAC, LOC, LANGUAGE, EVENT to the end of the URL below\n     FILTER(STRSTARTS(STR(?p), \"http://www.heritageconnector.org/RDF/entity\")).\n     ?s ?p ?o\n    }\n  }\n  ?subject ?p ?entity \n  # this line returns all non-linked (non-URL) entities\n  #FILTER(!STRSTARTS(STR(?entity), \"http\")).\n  # OR, this line returns all linked (URL) entities\n  FILTER(STRSTARTS(STR(?entity), \"http\")).\n\n# use the LIMIT and OFFSET numbers below to control page size and page number\n} ORDER BY ?entity LIMIT 500 OFFSET 1000"
     }
 ]
 
