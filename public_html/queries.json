@@ -23,6 +23,11 @@
       "title": "Find occurrences of people in the SMG collection in other National Museum collections",
       "tags": ["other collections"],
       "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n PREFIX wdt:  <http://www.wikidata.org/prop/direct/>\n PREFIX wd:  <http://www.wikidata.org/entity/>\n PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n PREFIX sdo: <https://schema.org/>\n SELECT * WHERE {\n   ?item skos:hasTopConcept \"PERSON\".\n   ?item rdfs:label ?itemLabel.\n   ?item owl:sameAs ?wdItem.\n     \n   SERVICE <https://query.wikidata.org/sparql> {    \n     #OPTIONAL{ ?wdItem wdt:P18 ?thumbnail }.\n     # V&A \n     OPTIONAL {\n      VALUES ?vaIDs { wdt:P3929 wdt:P6764  }.\n      ?wdItem ?vaIDs ?vaID.\n     }\n     \n     # Tate \n     OPTIONAL {\n       VALUES ?tateIDs {wdt:P2741}.\n       ?wdItem ?tateIDs ?tateID.\n     }\n     \n     # BFI\n     OPTIONAL {\n       VALUES ?bfiIDs {wdt:P2703 wdt:P4326 wdt:P4438}.\n       ?wdItem ?bfiIDs ?bfiID.\n     }\n     \n     # British Museum\n     OPTIONAL {\n       VALUES ?bmIDs {wdt:P8565 wdt:P1711}.\n       ?wdItem ?bmIDs ?britishMuseumID.\n       }\n        \n     # National Portrait Gallery\n     OPTIONAL {\n       VALUES ?npgIDs {wdt:P1816 wdt:P9144}\n       ?wdItem ?npgIDs ?nationalportraitID.\n       }\n   } \n }"
+    },
+    {
+      "title": "List entities",
+      "tags": ["NER"],
+      "body": "PREFIX hc: <http://www.heritageconnector.org/RDF/>\n\nSELECT * WHERE {\n  {SELECT DISTINCT ?p WHERE{\n     # add one of PERSON, ORG, OBJECT, DATE, NORP, FAC, LOC, LANGUAGE, EVENT to the end of the URL below\n   FILTER(STRSTARTS(STR(?p), \"http://www.heritageconnector.org/RDF/entity\")).\n   ?s ?p ?o\n    }\n  }\n  ?subject ?p ?entity \n  # this line returns all non-linked (non-URL) entities\n  #FILTER(!STRSTARTS(STR(?entity), \"http\")).\n  # OR, this line returns all linked (URL) entities\n  FILTER(STRSTARTS(STR(?entity), \"http\")).\n\n# use the LIMIT and OFFSET numbers below to control page size and page number\n} ORDER BY ?entity LIMIT 500 OFFSET 1000"
     }
 ]
 
