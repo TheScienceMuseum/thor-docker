@@ -33,6 +33,11 @@
       "title": "Number of entities by type, split into linked vs unlinked",
       "tags": ["NER", "high-level stats"],
       "body": "PREFIX hc: <http://www.heritageconnector.org/RDF/>\n\nSELECT ?p ?isLinked (COUNT(?entity) AS ?entityCount)  WHERE {\n  {SELECT DISTINCT ?p WHERE{\n     FILTER(STRSTARTS(STR(?p), \"http://www.heritageconnector.org/RDF/entity\")).\n     ?s ?p ?o\n    }\n  }\n  ?subject ?p ?entity.\n  BIND(STRSTARTS(STR(?entity), \"http\") AS ?isLinked).\n\n} GROUP BY ?p ?isLinked ORDER BY ?p ?isLinked"
+    },
+    {
+      "title": "Top unlinked entities by count",
+      "tags": ["NER"],
+      "body": "PREFIX hc: <http://www.heritageconnector.org/RDF/>\n\nSELECT ?entityName ?p (COUNT(?entityName) AS ?nameCount) WHERE {\n  {SELECT DISTINCT ?p WHERE{\n     FILTER(STRSTARTS(STR(?p), \"http://www.heritageconnector.org/RDF/entity\")).\n     FILTER(!STRENDS(STR(?p), \"DATE\")).\n     FILTER(!STRENDS(STR(?p), \"LANGUAGE\")).\n     FILTER(!STRENDS(STR(?p), \"NORP\")).\n     ?s ?p ?o.\n    }\n  }\n  ?subject ?p ?entityName.\n  FILTER(!STRSTARTS(STR(?entityName), \"http\")).\n\n} GROUP BY ?entityName ?p ORDER BY DESC(?nameCount) LIMIT 200"
     }
 ]
 
