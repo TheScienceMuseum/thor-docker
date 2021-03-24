@@ -37,7 +37,7 @@
     {
       "title": "Top unlinked entities by count",
       "tags": ["NER"],
-      "body": "PREFIX hc: <http://www.heritageconnector.org/RDF/>\n\nSELECT ?entityName ?p (COUNT(?entityName) AS ?nameCount) WHERE {\n  {SELECT DISTINCT ?p WHERE{\n     FILTER(STRSTARTS(STR(?p), \"http://www.heritageconnector.org/RDF/entity\")).\n     FILTER(!STRENDS(STR(?p), \"DATE\")).\n     FILTER(!STRENDS(STR(?p), \"LANGUAGE\")).\n     FILTER(!STRENDS(STR(?p), \"NORP\")).\n     ?s ?p ?o.\n    }\n  }\n  ?subject ?p ?entityName.\n  FILTER(!STRSTARTS(STR(?entityName), \"http\")).\n\n} GROUP BY ?entityName ?p ORDER BY DESC(?nameCount) LIMIT 200"
+      "body": "PREFIX hc: <http://www.heritageconnector.org/RDF/>\n\nSELECT ?entityName ?p (COUNT(?entityName) AS ?nameCount) WHERE {\n  {SELECT DISTINCT ?p WHERE{\n     FILTER(STRSTARTS(STR(?p), \"http://www.heritageconnector.org/RDF/entity\")).\n     FILTER(!STRENDS(STR(?p), \"DATE\")).\n     FILTER(!STRENDS(STR(?p), \"LANGUAGE\")).\n     FILTER(!STRENDS(STR(?p), \"NORP\")).\n     ?s ?p ?o.\n    }\n  }\n  ?subject ?p ?entityName.\n  FILTER(!STRSTARTS(STR(?entityName), \"http\")).\n\n} GROUP BY ?entityName ?p ORDER BY DESC(?nameCount) LIMIT 500"
     }
 ]
 
