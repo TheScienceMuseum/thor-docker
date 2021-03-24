@@ -16,7 +16,7 @@
     },
     {
       "title": "Get the number of Objects linked to Wikidata, by (Internal) Collection",
-      "tags": ["wikidata"],
+      "tags": ["wikidata", "high-level stats"],
       "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n PREFIX wdt:  <http://www.wikidata.org/prop/direct/>\n PREFIX wd:  <http://www.wikidata.org/entity/>\n PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n PREFIX sdo: <https://schema.org/>\n \n SELECT ?collection (COUNT(?item) AS ?count) WHERE {\n   ?item skos:hasTopConcept 'OBJECT'.\n   ?item owl:sameAs ?wdItem.\n   ?item sdo:isPartOf ?collection.\n } GROUP BY ?collection ORDER BY DESC(?count)"
     },
     {
@@ -28,6 +28,11 @@
       "title": "List entities",
       "tags": ["NER"],
       "body": "PREFIX hc: <http://www.heritageconnector.org/RDF/>\n\nSELECT * WHERE {\n  {SELECT DISTINCT ?p WHERE{\n     # add one of PERSON, ORG, OBJECT, DATE, NORP, FAC, LOC, LANGUAGE, EVENT to the end of the URL below\n     FILTER(STRSTARTS(STR(?p), \"http://www.heritageconnector.org/RDF/entity\")).\n     ?s ?p ?o\n    }\n  }\n  ?subject ?p ?entity \n  # this line returns all non-linked (non-URL) entities\n  #FILTER(!STRSTARTS(STR(?entity), \"http\")).\n  # OR, this line returns all linked (URL) entities\n  FILTER(STRSTARTS(STR(?entity), \"http\")).\n\n# use the LIMIT and OFFSET numbers below to control page size and page number\n} ORDER BY ?entity LIMIT 500 OFFSET 1000"
+    },
+    {
+      "title": "Number of entities by type, split into linked vs unlinked",
+      "tags": ["NER", "high-level stats"],
+      "body": "PREFIX hc: <http://www.heritageconnector.org/RDF/>\n\nSELECT ?p ?isLinked (COUNT(?entity) AS ?entityCount)  WHERE {\n  {SELECT DISTINCT ?p WHERE{\n     FILTER(STRSTARTS(STR(?p), \"http://www.heritageconnector.org/RDF/entity\")).\n     ?s ?p ?o\n    }\n  }\n  ?subject ?p ?entity.\n  BIND(STRSTARTS(STR(?entity), \"http\") AS ?isLinked).\n\n} GROUP BY ?p ?isLinked ORDER BY ?p ?isLinked"
     }
 ]
 
