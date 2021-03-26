@@ -58,9 +58,8 @@ Used to express links/terms discocvered by NER (Named Entity Recognition) in a r
 | Field       | Primary RDF Predicate     | Wikidata    | Notes |
 | ----------- | ----------- | ----------- | ----------- | 
 | Title | `foaf:title` | | |
-| Preferred Name | `foaf:givenName` | [WDT.P735](https://www.wikidata.org/wiki/Property:P735) | |
-| Family Name | `foaf:familyName` | [WDT.P734](https://www.wikidata.org/wiki/Property:P734) | |
-| Gender | `sdo:gender` | [WDT.P21](https://www.wikidata.org/wiki/Property:P21) |
+| Preferred Name | `rdfs:label` | | |
+| Product or Material Produced | `wdt:P1056` | | |
 | Founding Date/Inception | `sdo:foundingDate` | [WDT.P571](https://www.wikidata.org/wiki/Property:P571) | |
 | Dissolution Date | `sdo:dissolutionDate` | [WDT.P576](https://www.wikidata.org/wiki/Property:P576) | | 
 | Nationality | `sdo:nationality` | | | 
