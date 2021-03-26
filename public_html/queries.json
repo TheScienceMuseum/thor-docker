@@ -3,12 +3,17 @@
       "title": "Blank query with all prefixes populated",
       "tags": ["templates"],
       "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX sdo: <https://schema.org/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX smgp: <https://collection.sciencemuseumgroup.org.uk/people/>\nPREFIX smgo: <https://collection.sciencemuseumgroup.org.uk/objects/>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX hc: <http://www.heritageconnector.org/RDF/>"
-    }
-    {
-      "title": "Get triples from the Collection Knowledge Graph",
-      "tags": ["tutorial"],
-      "body": "SELECT * WHERE{?s ?p ?o.} LIMIT 100"
     },
+    {
+      "title": "Example SELECT query",
+      "tags": ["tutorial"],
+      "body": "SELECT * WHERE{  \n?s ?p ?o\n} LIMIT 100"
+    },
+    {
+      "title": "Example Federated query",
+      "tags": ["tutorial"],
+      "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX smgp: <https://collection.sciencemuseumgroup.org.uk/people/>\n\nSELECT * WHERE {\n  # get the Wikidata link and label for Robert Stephenson\n  VALUES ?item {smgp:cp2735}.\n  ?item owl:sameAs ?wdItem.\n  ?item rdfs:label ?itemLabel.\n  \n  SERVICE <https://query.wikidata.org/sparql> {\n    # get select properties from the matching Wikidata record\n    ?wdItem ?wdProp ?wdObject.\n    VALUES ?wdProp {wdt:P18 wdt:P19 wdt:P119 wdt:P22}.\n  }\n}"
+    }
     {
       "title": "Get People/Organisations/Objects with a link to Wikidata",
       "tags": ["wikidata"],
