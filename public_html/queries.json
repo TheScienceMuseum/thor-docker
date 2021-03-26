@@ -13,7 +13,7 @@
       "title": "Example Federated query",
       "tags": ["tutorial"],
       "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX smgp: <https://collection.sciencemuseumgroup.org.uk/people/>\n\nSELECT * WHERE {\n  # get the Wikidata link and label for Robert Stephenson\n  VALUES ?item {smgp:cp2735}.\n  ?item owl:sameAs ?wdItem.\n  ?item rdfs:label ?itemLabel.\n  \n  SERVICE <https://query.wikidata.org/sparql> {\n    # get select properties from the matching Wikidata record\n    ?wdItem ?wdProp ?wdObject.\n    VALUES ?wdProp {wdt:P18 wdt:P19 wdt:P119 wdt:P22}.\n  }\n}"
-    }
+    },
     {
       "title": "Get People/Organisations/Objects with a link to Wikidata",
       "tags": ["wikidata"],
