@@ -20,6 +20,13 @@ const commonNamespaces = [
   'bd: <http://www.bigdata.com/rdf#>',
   'lido: <http://www.lido-schema.org/>',
   'dbpedia: <http://dbpedia.org/resource/>',
+  'sdo: <https://schema.org/>',
+  'xsd: <http://www.w3.org/2001/XMLSchema#>',
+  'smgp: <https://collection.sciencemuseumgroup.org.uk/people/>',
+  'smgo: <https://collection.sciencemuseumgroup.org.uk/objects/>',
+  'wd: <http://www.wikidata.org/entity/>',
+  'wdt: <http://www.wikidata.org/prop/direct/>',
+  'hc: <http://www.heritageconnector.org/RDF/>',
 ];
 
 YASQE.Autocompleters._prefixes = YASQE.Autocompleters.prefixes;
