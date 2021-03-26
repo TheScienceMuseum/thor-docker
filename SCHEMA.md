@@ -30,7 +30,7 @@ Used to express links/terms discocvered by NER (Named Entity Recognition) in a r
 | ----------- | ----------- | ----------- |
 | `hc:entityPERSON` | Person | A person identified by NER | 
 | `hc:entityORG` | Organisation | An Organisation identified by NER | 
-| `hc:entityNORP` | | | 
+| `hc:entityNORP` | Nationality | A nationality identified by NER | 
 | `hc:entityFAC` | Facility | A building or facility identified by NER | 
 | `hc:entityLOC` | Place | A geographical location or country identified by NER | 
 | `hc:entityOBJECT` | Object | | 
