@@ -48,6 +48,11 @@
       "title": "Top unlinked entities by count",
       "tags": ["NER"],
       "body": "PREFIX hc: <http://www.heritageconnector.org/RDF/>\n\nSELECT ?entityName ?p (COUNT(?entityName) AS ?nameCount) WHERE {\n  {SELECT DISTINCT ?p WHERE{\n     FILTER(STRSTARTS(STR(?p), \"http://www.heritageconnector.org/RDF/entity\")).\n     FILTER(!STRENDS(STR(?p), \"DATE\")).\n     FILTER(!STRENDS(STR(?p), \"LANGUAGE\")).\n     FILTER(!STRENDS(STR(?p), \"NORP\")).\n     ?s ?p ?o.\n    }\n  }\n  ?subject ?p ?entityName.\n  FILTER(!STRSTARTS(STR(?entityName), \"http\")).\n\n} GROUP BY ?entityName ?p ORDER BY DESC(?nameCount) LIMIT 500"
+    },
+        {
+      "title": "Organisation's HQs and their Lat Longs",
+      "tags": ["Wikidata"],
+      "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX wdt:  <http://www.wikidata.org/prop/direct/>\nPREFIX wd:  <http://www.wikidata.org/entity/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?item ?itemLabel ?wdItem ?wdItemlabel ?wdHQLocation ?wdHQLocationLabel ?wdLatLong WHERE {\n  ?item skos:hasTopConcept 'ORGANISATION'.\n  ?item owl:sameAs ?wdItem.\n  ?item rdfs:label ?itemLabel.\n  \n  SERVICE <https://query.wikidata.org/sparql> {\n    ?wdItem rdfs:label ?wdItemlabel.\n    FILTER(LANG(?wdItemlabel) = \"en\").\n    OPTIONAL{ \n      ?wdItem wdt:P159 ?wdHQLocation.\n      ?wdHQLocation rdfs:label ?wdHQLocationLabel.\n      FILTER(LANG(?wdHQLocationLabel) = \"en\").\n      ?wdHQLocation wdt:P625 ?wdLatLong.\n   }.  \n  }  \n   \n}     \n\nLIMIT 100"
     }
 ]
 
