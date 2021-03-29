@@ -54,8 +54,10 @@
       "tags": ["Wikidata"],
       "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX wdt:  <http://www.wikidata.org/prop/direct/>\nPREFIX wd:  <http://www.wikidata.org/entity/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?item ?itemLabel ?wdItem ?wdItemlabel ?wdHQLocation ?wdHQLocationLabel ?wdLatLong WHERE {\n  ?item skos:hasTopConcept 'ORGANISATION'.\n  ?item owl:sameAs ?wdItem.\n  ?item rdfs:label ?itemLabel.\n  \n  SERVICE <https://query.wikidata.org/sparql> {\n    ?wdItem rdfs:label ?wdItemlabel.\n    FILTER(LANG(?wdItemlabel) = \"en\").\n    OPTIONAL{ \n      ?wdItem wdt:P159 ?wdHQLocation.\n      ?wdHQLocation rdfs:label ?wdHQLocationLabel.\n      FILTER(LANG(?wdHQLocationLabel) = \"en\").\n      ?wdHQLocation wdt:P625 ?wdLatLong.\n   }.  \n  }  \n   \n}     \n\nLIMIT 100"
     },
+    {
       "title": "People's place of birth and their Lat Longs",
       "tags": ["Wikidata"],
       "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n PREFIX wdt:  <http://www.wikidata.org/prop/direct/>\n PREFIX wd:  <http://www.wikidata.org/entity/>\n PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n \n SELECT ?item ?itemLabel ?wdItem ?wdItemlabel ?wdPlaceofBirth ?wdPlaceofBirthLabel ?wdLatLong WHERE {\n   ?item skos:hasTopConcept 'PERSON'.\n   ?item owl:sameAs ?wdItem.\n   ?item rdfs:label ?itemLabel.\n   \n   SERVICE <https://query.wikidata.org/sparql> {\n     ?wdItem rdfs:label ?wdItemlabel.\n     FILTER(LANG(?wdItemlabel) = \"en\").\n       ?wdItem wdt:P19 ?wdPlaceofBirth.\n       ?wdPlaceofBirth rdfs:label ?wdPlaceofBirthLabel.\n       ?wdPlaceofBirth wdt:P625 ?wdLatLong.}.\n       FILTER(LANG(?wdPlaceofBirthLabel) = \"en\").\n\n    \n } LIMIT 200"
+    }
 ]
 
