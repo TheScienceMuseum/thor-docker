@@ -24,7 +24,7 @@
 
 ## Custom HC Namespace (NER)
 
-Used to express links/terms discocvered by NER (Named Entity Recognition) in a records description or biography field. Values can either be a URIO or a string depening of wether trhe foudn entitioes have been linked to a knowlege graph (either the local Heritage Connector graph or an external graph such as Wikidata/Wikipedia)
+Used to express links/terms discocvered by NER (Named Entity Recognition) in a records description or biography field. Values can either be a URI or a string depending of whether the found entities have been linked to a knowledge graph (either the local Heritage Connector graph or an external graph such as Wikidata/Wikipedia)
 
 | RDF Predicate | Usage       | Notes |
 | ----------- | ----------- | ----------- |
