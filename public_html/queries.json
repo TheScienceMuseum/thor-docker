@@ -1,8 +1,18 @@
 [
     {
-      "title": "Get triples from the Collection Knowledge Graph",
+      "title": "Blank query with all prefixes populated",
+      "tags": ["templates"],
+      "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX sdo: <https://schema.org/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX smgp: <https://collection.sciencemuseumgroup.org.uk/people/>\nPREFIX smgo: <https://collection.sciencemuseumgroup.org.uk/objects/>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX hc: <http://www.heritageconnector.org/RDF/>"
+    },
+    {
+      "title": "Example SELECT query",
       "tags": ["tutorial"],
-      "body": "SELECT * WHERE{?s ?p ?o.} LIMIT 100"
+      "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX sdo: <https://schema.org/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX smgp: <https://collection.sciencemuseumgroup.org.uk/people/>\nPREFIX smgo: <https://collection.sciencemuseumgroup.org.uk/objects/>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX hc: <http://www.heritageconnector.org/RDF/>\nSELECT * WHERE{  \n?s ?p ?o\n} LIMIT 100"
+    },
+    {
+      "title": "Example Federated query",
+      "tags": ["tutorial"],
+      "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX smgp: <https://collection.sciencemuseumgroup.org.uk/people/>\n\nSELECT * WHERE {\n  # get the Wikidata link and label for Robert Stephenson\n  VALUES ?item {smgp:cp2735}.\n  ?item owl:sameAs ?wdItem.\n  ?item rdfs:label ?itemLabel.\n  \n  SERVICE <https://query.wikidata.org/sparql> {\n    # get select properties from the matching Wikidata record\n    ?wdItem ?wdProp ?wdObject.\n    VALUES ?wdProp {wdt:P18 wdt:P19 wdt:P119 wdt:P22}.\n  }\n}"
     },
     {
       "title": "Get People/Organisations/Objects with a link to Wikidata",
@@ -16,13 +26,38 @@
     },
     {
       "title": "Get the number of Objects linked to Wikidata, by (Internal) Collection",
-      "tags": ["wikidata"],
+      "tags": ["wikidata", "high-level stats"],
       "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n PREFIX wdt:  <http://www.wikidata.org/prop/direct/>\n PREFIX wd:  <http://www.wikidata.org/entity/>\n PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n PREFIX sdo: <https://schema.org/>\n \n SELECT ?collection (COUNT(?item) AS ?count) WHERE {\n   ?item skos:hasTopConcept 'OBJECT'.\n   ?item owl:sameAs ?wdItem.\n   ?item sdo:isPartOf ?collection.\n } GROUP BY ?collection ORDER BY DESC(?count)"
     },
     {
       "title": "Find occurrences of people in the SMG collection in other National Museum collections",
       "tags": ["other collections"],
       "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n PREFIX wdt:  <http://www.wikidata.org/prop/direct/>\n PREFIX wd:  <http://www.wikidata.org/entity/>\n PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n PREFIX sdo: <https://schema.org/>\n SELECT * WHERE {\n   ?item skos:hasTopConcept \"PERSON\".\n   ?item rdfs:label ?itemLabel.\n   ?item owl:sameAs ?wdItem.\n     \n   SERVICE <https://query.wikidata.org/sparql> {    \n     #OPTIONAL{ ?wdItem wdt:P18 ?thumbnail }.\n     # V&A \n     OPTIONAL {\n      VALUES ?vaIDs { wdt:P3929 wdt:P6764  }.\n      ?wdItem ?vaIDs ?vaID.\n     }\n     \n     # Tate \n     OPTIONAL {\n       VALUES ?tateIDs {wdt:P2741}.\n       ?wdItem ?tateIDs ?tateID.\n     }\n     \n     # BFI\n     OPTIONAL {\n       VALUES ?bfiIDs {wdt:P2703 wdt:P4326 wdt:P4438}.\n       ?wdItem ?bfiIDs ?bfiID.\n     }\n     \n     # British Museum\n     OPTIONAL {\n       VALUES ?bmIDs {wdt:P8565 wdt:P1711}.\n       ?wdItem ?bmIDs ?britishMuseumID.\n       }\n        \n     # National Portrait Gallery\n     OPTIONAL {\n       VALUES ?npgIDs {wdt:P1816 wdt:P9144}\n       ?wdItem ?npgIDs ?nationalportraitID.\n       }\n   } \n }"
+    },
+    {
+      "title": "List entities",
+      "tags": ["NER"],
+      "body": "PREFIX hc: <http://www.heritageconnector.org/RDF/>\n\nSELECT * WHERE {\n  {SELECT DISTINCT ?p WHERE{\n     # add one of PERSON, ORG, OBJECT, DATE, NORP, FAC, LOC, LANGUAGE, EVENT to the end of the URL below\n     FILTER(STRSTARTS(STR(?p), \"http://www.heritageconnector.org/RDF/entity\")).\n     ?s ?p ?o\n    }\n  }\n  ?subject ?p ?entity \n  # this line returns all non-linked (non-URL) entities\n  #FILTER(!STRSTARTS(STR(?entity), \"http\")).\n  # OR, this line returns all linked (URL) entities\n  FILTER(STRSTARTS(STR(?entity), \"http\")).\n\n# use the LIMIT and OFFSET numbers below to control page size and page number\n} ORDER BY ?entity LIMIT 500 OFFSET 1000"
+    },
+    {
+      "title": "Number of entities by type, split into linked vs unlinked",
+      "tags": ["NER", "high-level stats"],
+      "body": "PREFIX hc: <http://www.heritageconnector.org/RDF/>\n\nSELECT ?p ?isLinked (COUNT(?entity) AS ?entityCount)  WHERE {\n  {SELECT DISTINCT ?p WHERE{\n     FILTER(STRSTARTS(STR(?p), \"http://www.heritageconnector.org/RDF/entity\")).\n     ?s ?p ?o\n    }\n  }\n  ?subject ?p ?entity.\n  BIND(STRSTARTS(STR(?entity), \"http\") AS ?isLinked).\n\n} GROUP BY ?p ?isLinked ORDER BY ?p ?isLinked"
+    },
+    {
+      "title": "Top unlinked entities by count",
+      "tags": ["NER"],
+      "body": "PREFIX hc: <http://www.heritageconnector.org/RDF/>\n\nSELECT ?entityName ?p (COUNT(?entityName) AS ?nameCount) WHERE {\n  {SELECT DISTINCT ?p WHERE{\n     FILTER(STRSTARTS(STR(?p), \"http://www.heritageconnector.org/RDF/entity\")).\n     FILTER(!STRENDS(STR(?p), \"DATE\")).\n     FILTER(!STRENDS(STR(?p), \"LANGUAGE\")).\n     FILTER(!STRENDS(STR(?p), \"NORP\")).\n     ?s ?p ?o.\n    }\n  }\n  ?subject ?p ?entityName.\n  FILTER(!STRSTARTS(STR(?entityName), \"http\")).\n\n} GROUP BY ?entityName ?p ORDER BY DESC(?nameCount) LIMIT 500"
+    },
+        {
+      "title": "Organisation's HQs and their Lat Longs",
+      "tags": ["Wikidata"],
+      "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX wdt:  <http://www.wikidata.org/prop/direct/>\nPREFIX wd:  <http://www.wikidata.org/entity/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?item ?itemLabel ?wdItem ?wdItemlabel ?wdHQLocation ?wdHQLocationLabel ?wdLatLong WHERE {\n  ?item skos:hasTopConcept 'ORGANISATION'.\n  ?item owl:sameAs ?wdItem.\n  ?item rdfs:label ?itemLabel.\n  \n  SERVICE <https://query.wikidata.org/sparql> {\n    ?wdItem rdfs:label ?wdItemlabel.\n    FILTER(LANG(?wdItemlabel) = \"en\").\n    OPTIONAL{ \n      ?wdItem wdt:P159 ?wdHQLocation.\n      ?wdHQLocation rdfs:label ?wdHQLocationLabel.\n      FILTER(LANG(?wdHQLocationLabel) = \"en\").\n      ?wdHQLocation wdt:P625 ?wdLatLong.\n   }.  \n  }  \n   \n}     \n\nLIMIT 100"
+    },
+    {
+      "title": "People's place of birth and their Lat Longs",
+      "tags": ["Wikidata"],
+      "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n PREFIX wdt:  <http://www.wikidata.org/prop/direct/>\n PREFIX wd:  <http://www.wikidata.org/entity/>\n PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n \n SELECT ?item ?itemLabel ?wdItem ?wdItemlabel ?wdPlaceofBirth ?wdPlaceofBirthLabel ?wdLatLong WHERE {\n   ?item skos:hasTopConcept 'PERSON'.\n   ?item owl:sameAs ?wdItem.\n   ?item rdfs:label ?itemLabel.\n   \n   SERVICE <https://query.wikidata.org/sparql> {\n     ?wdItem rdfs:label ?wdItemlabel.\n     FILTER(LANG(?wdItemlabel) = \"en\").\n       ?wdItem wdt:P19 ?wdPlaceofBirth.\n       ?wdPlaceofBirth rdfs:label ?wdPlaceofBirthLabel.\n       ?wdPlaceofBirth wdt:P625 ?wdLatLong.}.\n       FILTER(LANG(?wdPlaceofBirthLabel) = \"en\").\n\n    \n } LIMIT 200"
     }
 ]
 
