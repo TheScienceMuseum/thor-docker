@@ -207,6 +207,124 @@ function renderPieChart() {
     .text(d => d.data.label);
 }
 
+function renderGraph() {
+  // const data = rawResponseData.results.bindings.map(data => {
+  //   return {
+  //     subject: data['s'].value,
+  //     predicate: data['p'].value,
+  //     object: data['o'].value,
+  //   };
+  // });
+
+  data = {"nodes":[{"id":1,"entityId":"fd1f96a5-1ea8-4532-ba0d-42db936801cb","group":1,"name":"Apples LLC","influence":8},{"id":2,"entityId":"19275365-5f7f-45e7-acda-d18933c86fc6","group":1,"name":"Driver Drives U","influence":8},{"id":3,"entityId":"1c70bc82-229e-4ceb-8110-22cc92805fe3","group":1,"name":"Krakatoa equity partners","influence":8},{"id":4,"entityId":"461ab5a1-e30f-4ffd-9ee9-2b4f85f98e0a","group":1,"name":"Leaping Lizards 1.0","influence":8},{"id":5,"entityId":"61d73985-4d6d-4d3c-90cb-2535c2a28641","group":1,"name":"Charly Charts","influence":8},{"id":6,"entityId":"b825e2cd-d848-4aba-b09d-82c72ccf8115","group":1,"name":"Hatteras Capital, LLP","influence":8},{"id":7,"entityId":"b939cbb6-a437-43da-8cd6-d11537879cdf","group":1,"name":"Indiana Sushi Co","influence":8},{"id":8,"entityId":"bb6ca6f9-5dfc-4bbe-a8f0-28c67c972f45","group":1,"name":"Echo Automotive, LLP","influence":8},{"id":9,"entityId":"d9a34dbf-4142-454b-9adc-4759f7b96ab9","group":1,"name":"BoomBox Radio Parts","influence":8},{"id":10,"entityId":"debb7db4-f740-4393-babf-31e3793b50de","group":1,"name":"French French Fries, LLC","influence":8},{"id":11,"entityId":"ed59c29f-23a3-43a8-b512-3e182208a0a8","group":1,"name":"Golf Partners, LLP","influence":8},{"id":12,"entityId":"ed6a2f01-c025-4370-b021-196b541c8f28","group":1,"name":"Maximum return capital parters holdco","influence":8},{"id":13,"entityId":"ff2ce5ea-61e8-4e86-89de-1d05317f62f3","group":1,"name":"Julie and Katie Bakery","influence":8}],"links":[{"source":6,"target":13,"weight":1},{"source":9,"target":5,"weight":1},{"source":9,"target":2,"weight":1},{"source":9,"target":8,"weight":1},{"source":9,"target":10,"weight":1},{"source":9,"target":11,"weight":1},{"source":9,"target":6,"weight":1},{"source":1,"target":9,"weight":5}]}
+
+  const width = window.innerWidth;
+  const height = 500;
+  const radius = 75
+
+  const zoom_handler = d3.zoom()
+    .on("zoom", zoom_actions);
+ 
+  function zoom_actions(){
+    group.attr("transform", d3.event.transform)
+  }
+
+  const links = data.links.map(d => Object.create(d));
+  const nodes = data.nodes.map(d => Object.create(d));
+
+  const forceCollide = d3.forceCollide(d => d.influence * d.name.length)
+      .strength(0.8);
+
+  const simulation = d3.forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id(d => d.id).distance(100))
+      .force("charge", d3.forceManyBody())
+      .force('collide', forceCollide)
+      .force("center", d3.forceCenter(width / 4, height / 2));
+
+  // original
+  // const svg = d3.create("svg")
+  //   .attr("viewBox", [0, 0, width, height])
+
+  const svg = d3.select('#resultContainer').append('svg')
+  .attr('width', width)
+  .attr('height', height)
+  .attr('text-anchor', 'middle')
+  .style('font', '14px sans-serif');
+
+  const group = svg.append('g')
+  .attr('transform', `translate(${width / 2},${height / 2})`);
+
+  //zoom_handler(svg);  
+
+  const link = group
+      .selectAll("line")
+      .data(links)
+      .join("line")
+      .attr("stroke", "#000")
+      .attr("stroke-opacity", 1.0)
+      .attr("stroke-width", 3);
+  //    .attr("stroke-width", d => Math.sqrt(d.value));
+
+  const node = group.selectAll(".node")
+      .data(nodes)
+      .enter()
+      .append('g')
+      .attr('class', 'node')
+  //      .call(drag(simulation));
+
+  //Add circles to each node
+  const circle = node.append("circle")
+       .attr("r", radius)
+  //     .attr("r", (d) => d.influence > 15 ? d.influence : d.influence / 2 )
+      .attr("stroke", "#000")
+      .attr("stroke-opacity", 1.0)
+      .attr("stroke-width", 3)
+      .attr("fill-opacioty", 0)
+      .attr("fill", d => color(d) );
+
+  //Add labels to each node
+  /*
+  const label = node.append("text")
+            .attr("dx", "0em")
+            .attr("dy", "0em")
+            .attr("font-size", 14 )
+  //            .attr("font-size", (d) => d.influence * 1.5 > 40 ? d.influence * 1.5: 14 )
+            .attr("text-anchor", "middle")
+            .text((d) => d.name )
+            .call(wrap, 100);
+  */
+
+  const side = 2 * radius * Math.cos(Math.PI / 4),
+    dx = radius - side / 2;  
+
+  const label = node.append("g")
+    .attr('transform', 'translate(' + [radius * -0.75, radius * -0.5] + ')')
+    .append("foreignObject")
+    .attr("width", side)
+    .attr("height", side)
+    .append("xhtml:body")
+    .append("span")
+    .attr("class", "center")
+    .html((d) => d.name );
+
+  simulation.on("tick", () => {
+    link
+        //.attr("stroke-width", d => d.weight * 10)
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
+
+    node
+        .attr('r', d => d.influence)
+        .attr("cx", d => d.x)
+        .attr("cy", d => d.y)
+        .attr("transform", (d) => "translate(" + d.x + "," + d.y + ")" );
+  });
+
+  invalidation.then(() => simulation.stop());
+}
+
 let renderMode = 'table';
 function setRenderMode(evt) {
   renderMode = evt.options[evt.selectedIndex].value;
@@ -243,6 +361,13 @@ function render() {
       renderPieChart();
     } else {
       flashMessage('Could not render Pie chart. Missing variables "count"/"label".');
+      renderTable();
+    }
+  } else if (renderMode === 'graph') {
+    if (rawResponseData.head.vars.includes('s') && rawResponseData.head.vars.includes('p') && rawResponseData.head.vars.includes('o')) {
+      renderGraph();
+    } else {
+      flashMessage('Could not render Force Directed graph. Missing variables "s-p-o".');
       renderTable();
     }
   } else {

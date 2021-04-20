@@ -51,6 +51,7 @@
       <select class="raa-input raa-select float-left m-tb-small m-lr-small" style="max-width: 200px;" onchange="setRenderMode(this)">
         <option value="table">Table</option>
         <option value="pie">Pie Chart</option>
+        <option value="graph">Force Directed Graph</option>
         <option value="images">Image Grid</option>
       </select>
       <select class="raa-input raa-select float-left m-tb-small m-lr-small" style="max-width: 200px;" onchange="download(this)">
@@ -121,6 +122,9 @@
 
           <h4>Pie Chart</h4>
           <p>The pie chart requires two variables. <var>?count</var> should be a numeric value. <var>?label</var> should be a literal.</p>
+
+          <h4>Force Directed Graph</h4>
+          <p>The Force Directed Graph requires three variables. <var>?s</var> should be a uri. <var>?p</var> should be a uri. <var>?o</var> should be a uri. </p>
 
           <h3>Keyboard Shortcuts</h3>
           <table class="raa-table">
