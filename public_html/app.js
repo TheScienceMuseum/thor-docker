@@ -216,7 +216,7 @@ function renderGraph() {
   //   };
   // });
 
-  data = {"nodes":[{"id":1,"entityId":"fd1f96a5-1ea8-4532-ba0d-42db936801cb","group":1,"name":"Apples LLC","influence":8},{"id":2,"entityId":"19275365-5f7f-45e7-acda-d18933c86fc6","group":1,"name":"Driver Drives U","influence":8},{"id":3,"entityId":"1c70bc82-229e-4ceb-8110-22cc92805fe3","group":1,"name":"Krakatoa equity partners","influence":8},{"id":4,"entityId":"461ab5a1-e30f-4ffd-9ee9-2b4f85f98e0a","group":1,"name":"Leaping Lizards 1.0","influence":8},{"id":5,"entityId":"61d73985-4d6d-4d3c-90cb-2535c2a28641","group":1,"name":"Charly Charts","influence":8},{"id":6,"entityId":"b825e2cd-d848-4aba-b09d-82c72ccf8115","group":1,"name":"Hatteras Capital, LLP","influence":8},{"id":7,"entityId":"b939cbb6-a437-43da-8cd6-d11537879cdf","group":1,"name":"Indiana Sushi Co","influence":8},{"id":8,"entityId":"bb6ca6f9-5dfc-4bbe-a8f0-28c67c972f45","group":1,"name":"Echo Automotive, LLP","influence":8},{"id":9,"entityId":"d9a34dbf-4142-454b-9adc-4759f7b96ab9","group":1,"name":"BoomBox Radio Parts","influence":8},{"id":10,"entityId":"debb7db4-f740-4393-babf-31e3793b50de","group":1,"name":"French French Fries, LLC","influence":8},{"id":11,"entityId":"ed59c29f-23a3-43a8-b512-3e182208a0a8","group":1,"name":"Golf Partners, LLP","influence":8},{"id":12,"entityId":"ed6a2f01-c025-4370-b021-196b541c8f28","group":1,"name":"Maximum return capital parters holdco","influence":8},{"id":13,"entityId":"ff2ce5ea-61e8-4e86-89de-1d05317f62f3","group":1,"name":"Julie and Katie Bakery","influence":8}],"links":[{"source":6,"target":13,"weight":1},{"source":9,"target":5,"weight":1},{"source":9,"target":2,"weight":1},{"source":9,"target":8,"weight":1},{"source":9,"target":10,"weight":1},{"source":9,"target":11,"weight":1},{"source":9,"target":6,"weight":1},{"source":1,"target":9,"weight":5}]}
+  data = {"nodes":[{"id":1,"entityId":"fd1f96a5-1ea8-4532-ba0d-42db936801cb","group":1,"name":"Apples LLC"},{"id":2,"entityId":"19275365-5f7f-45e7-acda-d18933c86fc6","group":1,"name":"Driver Drives U"},{"id":3,"entityId":"1c70bc82-229e-4ceb-8110-22cc92805fe3","group":1,"name":"Krakatoa equity partners"},{"id":4,"entityId":"461ab5a1-e30f-4ffd-9ee9-2b4f85f98e0a","group":1,"name":"Leaping Lizards 1.0"},{"id":5,"entityId":"61d73985-4d6d-4d3c-90cb-2535c2a28641","group":1,"name":"Charly Charts"},{"id":6,"entityId":"b825e2cd-d848-4aba-b09d-82c72ccf8115","group":1,"name":"Hatteras Capital, LLP"},{"id":7,"entityId":"b939cbb6-a437-43da-8cd6-d11537879cdf","group":1,"name":"Indiana Sushi Co"},{"id":8,"entityId":"bb6ca6f9-5dfc-4bbe-a8f0-28c67c972f45","group":1,"name":"Echo Automotive, LLP"},{"id":9,"entityId":"d9a34dbf-4142-454b-9adc-4759f7b96ab9","group":1,"name":"BoomBox Radio Parts"},{"id":10,"entityId":"debb7db4-f740-4393-babf-31e3793b50de","group":1,"name":"French French Fries, LLC"},{"id":11,"entityId":"ed59c29f-23a3-43a8-b512-3e182208a0a8","group":1,"name":"Golf Partners, LLP"},{"id":12,"entityId":"ed6a2f01-c025-4370-b021-196b541c8f28","group":1,"name":"Maximum return capital parters holdco"},{"id":13,"entityId":"ff2ce5ea-61e8-4e86-89de-1d05317f62f3","group":1,"name":"Julie and Katie Bakery"}],"links":[{"source":6,"target":13},{"source":9,"target":5},{"source":9,"target":2},{"source":9,"target":8},{"source":9,"target":10},{"source":9,"target":11},{"source":9,"target":6},{"source":1,"target":9}]}
 
   const width = window.innerWidth;
   const height = 500;
@@ -232,7 +232,7 @@ function renderGraph() {
   const links = data.links.map(d => Object.create(d));
   const nodes = data.nodes.map(d => Object.create(d));
 
-  const forceCollide = d3.forceCollide(d => d.influence * d.name.length)
+  const forceCollide = d3.forceCollide(d => 8 * d.name.length)
       .strength(0.8);
 
   //custom force to put stuff in a box 
@@ -325,7 +325,7 @@ function renderGraph() {
 
   simulation.on("tick", () => {
     node
-      .attr('r', d => d.influence)
+      .attr('r', radius)
       // attempts at keeping the nodes within the bounding box
       .attr("cx", function(d) { return d.x = Math.max(radius, Math.min(width - radius, d.x)); })
       .attr("cy", function(d) { return d.y = Math.max(radius, Math.min(height - radius, d.y)); })
@@ -335,7 +335,6 @@ function renderGraph() {
       .attr("transform", (d) => "translate(" + d.x + "," + d.y + ")" );
 
     link
-        //.attr("stroke-width", d => d.weight * 10)
         .attr("x1", d => d.source.x)
         .attr("y1", d => d.source.y)
         .attr("x2", d => d.target.x)
