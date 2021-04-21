@@ -268,7 +268,7 @@ function renderGraph() {
   const group = svg.append('g')
   .attr('transform', `translate(${width / 2},${height / 2})`);
 
-  //zoom_handler(svg);  
+  zoom_handler(svg);  
 
   const link = group
       .selectAll("line")
