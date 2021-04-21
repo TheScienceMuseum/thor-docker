@@ -220,7 +220,7 @@ function renderGraph() {
 
   const width = window.innerWidth;
   const height = 500;
-  const radius = 75
+  const radius = 50;
 
   const zoom_handler = d3.zoom()
     .on("zoom", zoom_actions);
@@ -235,19 +235,33 @@ function renderGraph() {
   const forceCollide = d3.forceCollide(d => d.influence * d.name.length)
       .strength(0.8);
 
+  //custom force to put stuff in a box 
+  function box_force(alpha) { 
+    for (var i = 0, n = nodes.length; i < n; ++i) {
+      curr_node = nodes[i];
+      curr_node.x = Math.max(radius, Math.min(width - radius, curr_node.x));
+      curr_node.y = Math.max(radius, Math.min(height - radius, curr_node.y));
+    }
+  }
+
   const simulation = d3.forceSimulation(nodes)
       .force("link", d3.forceLink(links).id(d => d.id).distance(100))
       .force("charge", d3.forceManyBody())
       .force('collide', forceCollide)
-      .force("center", d3.forceCenter(width / 4, height / 2));
+      .force("center", d3.forceCenter(width / 4, height / 2))
+      // .force("box_force", box_force);
+      // .force("x", d3.forceX([width/2]).strength(0.01))
+      // .force("y", d3.forceY([height/2]).strength(0.05));
+    
 
   // original
   // const svg = d3.create("svg")
   //   .attr("viewBox", [0, 0, width, height])
 
   const svg = d3.select('#resultContainer').append('svg')
-  .attr('width', width)
-  .attr('height', height)
+  // .attr('width', width)
+  // .attr('height', height)
+  .attr("viewBox", [0, 0, width, height])
   .attr('text-anchor', 'middle')
   .style('font', '14px sans-serif');
 
@@ -271,6 +285,8 @@ function renderGraph() {
       .append('g')
       .attr('class', 'node')
   //      .call(drag(simulation));
+
+  const color = function(d){return "#ffffff"}
 
   //Add circles to each node
   const circle = node.append("circle")
@@ -308,6 +324,16 @@ function renderGraph() {
     .html((d) => d.name );
 
   simulation.on("tick", () => {
+    node
+      .attr('r', d => d.influence)
+      // attempts at keeping the nodes within the bounding box
+      .attr("cx", function(d) { return d.x = Math.max(radius, Math.min(width - radius, d.x)); })
+      .attr("cy", function(d) { return d.y = Math.max(radius, Math.min(height - radius, d.y)); })
+      // alternative to above
+      // .attr("cx", d => d.x)
+      // .attr("cy", d => d.y)
+      .attr("transform", (d) => "translate(" + d.x + "," + d.y + ")" );
+
     link
         //.attr("stroke-width", d => d.weight * 10)
         .attr("x1", d => d.source.x)
@@ -315,14 +341,9 @@ function renderGraph() {
         .attr("x2", d => d.target.x)
         .attr("y2", d => d.target.y);
 
-    node
-        .attr('r', d => d.influence)
-        .attr("cx", d => d.x)
-        .attr("cy", d => d.y)
-        .attr("transform", (d) => "translate(" + d.x + "," + d.y + ")" );
   });
 
-  invalidation.then(() => simulation.stop());
+  // invalidation.then(() => simulation.stop());
 }
 
 let renderMode = 'table';
