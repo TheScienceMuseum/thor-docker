@@ -295,7 +295,7 @@ function renderGraph() {
       .attr("stroke", "#000")
       .attr("stroke-opacity", 1.0)
       .attr("stroke-width", 3)
-      .attr("fill-opacioty", 0)
+      .attr("fill-opacity", 1)
       .attr("fill", d => color(d) );
 
   //Add labels to each node
@@ -313,13 +313,13 @@ function renderGraph() {
   const side = 2 * radius * Math.cos(Math.PI / 4),
     dx = radius - side / 2;  
 
-  const label = node.append("g")
+  // label
+  node.append("g")
     .attr('transform', 'translate(' + [radius * -0.75, radius * -0.5] + ')')
     .append("foreignObject")
     .attr("width", side)
     .attr("height", side)
-    .append("xhtml:body")
-    .append("span")
+    .append("xhtml:p")
     .attr("class", "center")
     .html((d) => d.name );
 
@@ -342,7 +342,7 @@ function renderGraph() {
 
   });
 
-  // invalidation.then(() => simulation.stop());
+  invalidation.then(() => simulation.stop());
 }
 
 let renderMode = 'table';

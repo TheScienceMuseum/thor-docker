@@ -357,3 +357,8 @@ select {
 .float-left {
   float: left;
 }
+
+svg .center {
+  display: block;
+  text-align: center;
+}
