@@ -269,12 +269,13 @@ function renderGraph() {
   const nodes = data.nodes.map(d => Object.create(d));
 
   const simulation = d3.forceSimulation(nodes)
-      .force("link", d3.forceLink(links).id(d => d.id).distance(2.5*radius).strength(2))
+      .force("link", d3.forceLink(links).id(d => d.id).distance(2.5*radius).strength(1))
       .force("charge", d3.forceManyBody().strength(-20))
-      .force('collide', d3.forceCollide().radius(function (d) {return 1.5*radius}))
+      .force('collide', d3.forceCollide().radius(function (d) {return ellipseWidth}))
       .force("center", d3.forceCenter(width / 4, height / 2))
       .force("x", d3.forceX([width/2]).strength(0.01))
-      .force("y", d3.forceY([height/2]).strength(0.15));
+      .force("y", d3.forceY([height/2]).strength(0.15))
+      .alphaTarget(0);
     
   const svg = d3.select('#resultContainer').append('svg')
   // .attr('width', width)
@@ -318,15 +319,17 @@ function renderGraph() {
       .append('g')
       .attr('class', 'node')
       .call(d3.drag() 
-      .on("start", dragstarted) //start - after a new pointer becomes active (on mousedown or touchstart).
-      .on("drag", dragged)) //drag - after an active pointer moves (on mousemove or touchmove).
+        .on("start", dragstarted) //start - after a new pointer becomes active (on mousedown or touchstart).
+        .on("drag", dragged) //drag - after an active pointer moves (on mousemove or touchmove).
+        .on("end", dragended)
+      )
       .on('click', function (d) {
         if (d.id.startsWith('http')) {
           window.open(d.id);
         }});
   
   function dragstarted(d) {
-    if (!d3.event.active) simulation.alphaTarget(0.3).restart();//sets the current target alpha to the specified number in the range [0,1].
+    if (!d3.event.active) simulation.alphaTarget(0.1).restart();//sets the current target alpha to the specified number in the range [0,1].
     d.fy = d.y; //fx - the node’s fixed x-position. Original is null.
     d.fx = d.x; //fy - the node’s fixed y-position. Original is null.
   }
@@ -334,6 +337,12 @@ function renderGraph() {
   function dragged(d) {
     d.fx = d3.event.x;
     d.fy = d3.event.y;
+  }
+
+  function dragended(d) {
+    if (!d3.event.active) {
+      simulation.alphaTarget(0)
+    }
   }
 
   const setCircleColor = function(d){
