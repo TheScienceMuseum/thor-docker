@@ -319,7 +319,11 @@ function renderGraph() {
       .attr('class', 'node')
       .call(d3.drag() 
       .on("start", dragstarted) //start - after a new pointer becomes active (on mousedown or touchstart).
-      .on("drag", dragged)); //drag - after an active pointer moves (on mousemove or touchmove).
+      .on("drag", dragged)) //drag - after an active pointer moves (on mousemove or touchmove).
+      .on('click', function (d) {
+        if (d.id.startsWith('http')) {
+          window.open(d.id);
+        }});
   
   function dragstarted(d) {
     if (!d3.event.active) simulation.alphaTarget(0.3).restart();//sets the current target alpha to the specified number in the range [0,1].
