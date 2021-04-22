@@ -266,22 +266,14 @@ function renderGraph() {
   const links = data.links.map(d => Object.create(d));
   const nodes = data.nodes.map(d => Object.create(d));
 
-  const forceCollide = d3.forceCollide(d => 8 * d.label.length)
-      .strength(0.8);
-
   const simulation = d3.forceSimulation(nodes)
-      .force("link", d3.forceLink(links).id(d => d.id).distance(100))
-      .force("charge", d3.forceManyBody())
-      .force('collide', forceCollide)
-      // .force("center", d3.forceCenter(width / 4, height / 2))
-      // .force("x", d3.forceX([width/2]).strength(0.01))
-      // .force("y", d3.forceY([height/2]).strength(0.05));
+      .force("link", d3.forceLink(links).id(d => d.id).distance(2.5*radius).strength(2))
+      .force("charge", d3.forceManyBody().strength(-20))
+      .force('collide', d3.forceCollide().radius(function (d) {return 1.5*radius}))
+      .force("center", d3.forceCenter(width / 4, height / 2))
+      .force("x", d3.forceX([width/2]).strength(0.01))
+      .force("y", d3.forceY([height/2]).strength(0.15));
     
-
-  // original
-  // const svg = d3.create("svg")
-  //   .attr("viewBox", [0, 0, width, height])
-
   const svg = d3.select('#resultContainer').append('svg')
   // .attr('width', width)
   // .attr('height', height)
@@ -299,8 +291,8 @@ function renderGraph() {
       .data(links)
       .join("line")
       .attr("stroke", "#000")
-      .attr("stroke-opacity", 1.0)
-      .attr("stroke-width", 3);
+      .attr("stroke-opacity", 0.6)
+      .attr("stroke-width", 1);
   //    .attr("stroke-width", d => Math.sqrt(d.value));
 
   const node = group.selectAll(".node")
@@ -308,18 +300,26 @@ function renderGraph() {
       .enter()
       .append('g')
       .attr('class', 'node');
-  //      .call(drag(simulation));
 
-  const color = function(d){return "#ffffff"}
+  const setCircleColor = function(d){
+    if (d.id.includes("collection.sciencemuseum")) {
+      return "#C6E2E9"
+    } else if (d.id.includes("wikidata")) {
+      return "#FFBA08"
+    }
+    else {
+      return "#ffffff"
+    }
+  }
 
   //Add circles to each node
   const circle = node.append("circle")
       .attr("r", radius)
       .attr("stroke", "#000")
       .attr("stroke-opacity", 1.0)
-      .attr("stroke-width", 3)
+      .attr("stroke-width", 2)
       .attr("fill-opacity", 1)
-      .attr("fill", d => color(d) );
+      .attr("fill", d => setCircleColor(d) )
 
   const side = 2 * radius * Math.cos(Math.PI / 4),
     dx = radius - side / 2;  
@@ -338,11 +338,11 @@ function renderGraph() {
     node
       .attr('r', radius)
       // attempts at keeping the nodes within the bounding box
-      .attr("cx", function(d) { return d.x = Math.max(radius, Math.min(width - radius, d.x)); })
-      .attr("cy", function(d) { return d.y = Math.max(radius, Math.min(height - radius, d.y)); })
+      // .attr("cx", function(d) { return d.x = Math.max(radius, Math.min(width - radius, d.x)); })
+      // .attr("cy", function(d) { return d.y = Math.max(radius, Math.min(height - radius, d.y)); })
       // alternative to above
-      // .attr("cx", d => d.x)
-      // .attr("cy", d => d.y)
+      .attr("cx", d => d.x)
+      .attr("cy", d => d.y)
       .attr("transform", (d) => "translate(" + d.x + "," + d.y + ")" );
 
     link
@@ -353,7 +353,6 @@ function renderGraph() {
 
   });
 
-  // invalidation.then(() => simulation.stop());
 }
 
 let renderMode = 'table';
