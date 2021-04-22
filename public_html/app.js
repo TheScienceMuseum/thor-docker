@@ -254,7 +254,9 @@ function renderGraph() {
 
   const width = window.innerWidth;
   const height = 500;
-  const radius = 50;
+  const radius = 60;
+  const ellipseWidth = radius * 1.5;
+  const ellipseHeight = radius / 2.5;
 
   const zoom_handler = d3.zoom()
     .on("zoom", zoom_actions);
@@ -332,33 +334,43 @@ function renderGraph() {
 
   const setCircleColor = function(d){
     if (d.id.includes("collection.sciencemuseum")) {
-      return "#C6E2E9"
+      return "#FF9B42"
     } else if (d.id.includes("wikidata")) {
-      return "#FFBA08"
+      return "#FFE39D"
     }
     else {
-      return "#ffffff"
+      return "#E9F4F6"
     }
   }
 
   //Add circles to each node
-  const circle = node.append("circle")
-      .attr("r", radius)
-      .attr("stroke", "#000")
-      .attr("stroke-opacity", 1.0)
-      .attr("stroke-width", 2)
+  // const circle = node.append("circle")
+  //     .attr("r", radius)
+  //     .attr("stroke", "#000")
+  //     .attr("stroke-opacity", 1.0)
+  //     .attr("stroke-width", 2)
+  //     .attr("fill-opacity", 1)
+  //     .attr("fill", d => setCircleColor(d) )
+      
+  // Ellipses instead of circles
+  node.append("ellipse")
+      .attr("rx", function(d) { return ellipseWidth; })
+      .attr("ry", function(d) { return ellipseHeight; })
+      // .attr("stroke", "#000")
+      .attr("stroke-opacity", 0)
+      .attr("stroke-width", 0)
       .attr("fill-opacity", 1)
       .attr("fill", d => setCircleColor(d) )
-
+      
   const side = 2 * radius * Math.cos(Math.PI / 4),
     dx = radius - side / 2;  
 
   // label
   node.append("g")
-    .attr('transform', 'translate(' + [radius * -0.75, radius * -0.5] + ')')
+    .attr('transform', 'translate(' + [ellipseWidth * -0.75, ellipseHeight * -0.5] + ')')
     .append("foreignObject")
-    .attr("width", side)
-    .attr("height", side)
+    .attr("width", ellipseWidth/radius*side)
+    .attr("height", ellipseHeight/radius*side)
     .append("xhtml:p")
     .attr("class", "center")
     .html((d) => d.label );
