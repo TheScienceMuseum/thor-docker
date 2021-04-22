@@ -314,7 +314,21 @@ function renderGraph() {
       .data(nodes)
       .enter()
       .append('g')
-      .attr('class', 'node');
+      .attr('class', 'node')
+      .call(d3.drag() 
+      .on("start", dragstarted) //start - after a new pointer becomes active (on mousedown or touchstart).
+      .on("drag", dragged)); //drag - after an active pointer moves (on mousemove or touchmove).
+  
+  function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();//sets the current target alpha to the specified number in the range [0,1].
+    d.fy = d.y; //fx - the node’s fixed x-position. Original is null.
+    d.fx = d.x; //fy - the node’s fixed y-position. Original is null.
+  }
+  
+  function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+  }
 
   const setCircleColor = function(d){
     if (d.id.includes("collection.sciencemuseum")) {
