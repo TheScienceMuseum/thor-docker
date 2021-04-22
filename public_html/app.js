@@ -208,15 +208,49 @@ function renderPieChart() {
 }
 
 function renderGraph() {
-  // const data = rawResponseData.results.bindings.map(data => {
-  //   return {
-  //     subject: data['s'].value,
-  //     predicate: data['p'].value,
-  //     object: data['o'].value,
-  //   };
-  // });
+  function transformDataForGraph (rawResponseData) {
+    const dataColumns = rawResponseData.head.vars;
+    const dataFirstColumn = dataColumns[0];
+    const data = rawResponseData.results.bindings;
 
-  data = {"nodes":[{"id":1,"entityId":"fd1f96a5-1ea8-4532-ba0d-42db936801cb","group":1,"name":"Apples LLC"},{"id":2,"entityId":"19275365-5f7f-45e7-acda-d18933c86fc6","group":1,"name":"Driver Drives U"},{"id":3,"entityId":"1c70bc82-229e-4ceb-8110-22cc92805fe3","group":1,"name":"Krakatoa equity partners"},{"id":4,"entityId":"461ab5a1-e30f-4ffd-9ee9-2b4f85f98e0a","group":1,"name":"Leaping Lizards 1.0"},{"id":5,"entityId":"61d73985-4d6d-4d3c-90cb-2535c2a28641","group":1,"name":"Charly Charts"},{"id":6,"entityId":"b825e2cd-d848-4aba-b09d-82c72ccf8115","group":1,"name":"Hatteras Capital, LLP"},{"id":7,"entityId":"b939cbb6-a437-43da-8cd6-d11537879cdf","group":1,"name":"Indiana Sushi Co"},{"id":8,"entityId":"bb6ca6f9-5dfc-4bbe-a8f0-28c67c972f45","group":1,"name":"Echo Automotive, LLP"},{"id":9,"entityId":"d9a34dbf-4142-454b-9adc-4759f7b96ab9","group":1,"name":"BoomBox Radio Parts"},{"id":10,"entityId":"debb7db4-f740-4393-babf-31e3793b50de","group":1,"name":"French French Fries, LLC"},{"id":11,"entityId":"ed59c29f-23a3-43a8-b512-3e182208a0a8","group":1,"name":"Golf Partners, LLP"},{"id":12,"entityId":"ed6a2f01-c025-4370-b021-196b541c8f28","group":1,"name":"Maximum return capital parters holdco"},{"id":13,"entityId":"ff2ce5ea-61e8-4e86-89de-1d05317f62f3","group":1,"name":"Julie and Katie Bakery"}],"links":[{"source":6,"target":13},{"source":9,"target":5},{"source":9,"target":2},{"source":9,"target":8},{"source":9,"target":10},{"source":9,"target":11},{"source":9,"target":6},{"source":1,"target":9}]}
+    var nodes = [];
+    var links = [];
+
+    for (const [row_idx, row] of data.entries()) {
+        for (const [col_idx, col] of dataColumns.entries()) {
+            if (!col.includes("Label")) {
+                var nodeLabel = (row[col + "Label"]) ? row[col + "Label"].value : row[col].value
+                var nodeId = row[col].value
+                var node = {
+                    id: nodeId,
+                    label: nodeLabel
+                }
+    
+                if (col_idx != 0) {
+                    // create new edge
+                    var link = {
+                        source: row[dataFirstColumn].value,
+                        target: nodeId
+                    };
+                    links.push(link);
+    
+                    if (!nodes[nodeId]) {
+                        // create a new node if it doesn't exist
+                        nodes[nodeId] = node;
+                    }
+                } else {
+                    nodes[nodeId] = node;
+                }
+            }
+        }
+    }
+    return {
+        nodes: Object.values(nodes),
+        links: links
+    }
+  }
+
+  const data = transformDataForGraph(rawResponseData);
 
   const width = window.innerWidth;
   const height = 500;
@@ -232,24 +266,14 @@ function renderGraph() {
   const links = data.links.map(d => Object.create(d));
   const nodes = data.nodes.map(d => Object.create(d));
 
-  const forceCollide = d3.forceCollide(d => 8 * d.name.length)
+  const forceCollide = d3.forceCollide(d => 8 * d.label.length)
       .strength(0.8);
-
-  //custom force to put stuff in a box 
-  function box_force(alpha) { 
-    for (var i = 0, n = nodes.length; i < n; ++i) {
-      curr_node = nodes[i];
-      curr_node.x = Math.max(radius, Math.min(width - radius, curr_node.x));
-      curr_node.y = Math.max(radius, Math.min(height - radius, curr_node.y));
-    }
-  }
 
   const simulation = d3.forceSimulation(nodes)
       .force("link", d3.forceLink(links).id(d => d.id).distance(100))
       .force("charge", d3.forceManyBody())
       .force('collide', forceCollide)
-      .force("center", d3.forceCenter(width / 4, height / 2))
-      // .force("box_force", box_force);
+      // .force("center", d3.forceCenter(width / 4, height / 2))
       // .force("x", d3.forceX([width/2]).strength(0.01))
       // .force("y", d3.forceY([height/2]).strength(0.05));
     
@@ -283,32 +307,19 @@ function renderGraph() {
       .data(nodes)
       .enter()
       .append('g')
-      .attr('class', 'node')
+      .attr('class', 'node');
   //      .call(drag(simulation));
 
   const color = function(d){return "#ffffff"}
 
   //Add circles to each node
   const circle = node.append("circle")
-       .attr("r", radius)
-  //     .attr("r", (d) => d.influence > 15 ? d.influence : d.influence / 2 )
+      .attr("r", radius)
       .attr("stroke", "#000")
       .attr("stroke-opacity", 1.0)
       .attr("stroke-width", 3)
       .attr("fill-opacity", 1)
       .attr("fill", d => color(d) );
-
-  //Add labels to each node
-  /*
-  const label = node.append("text")
-            .attr("dx", "0em")
-            .attr("dy", "0em")
-            .attr("font-size", 14 )
-  //            .attr("font-size", (d) => d.influence * 1.5 > 40 ? d.influence * 1.5: 14 )
-            .attr("text-anchor", "middle")
-            .text((d) => d.name )
-            .call(wrap, 100);
-  */
 
   const side = 2 * radius * Math.cos(Math.PI / 4),
     dx = radius - side / 2;  
@@ -321,7 +332,7 @@ function renderGraph() {
     .attr("height", side)
     .append("xhtml:p")
     .attr("class", "center")
-    .html((d) => d.name );
+    .html((d) => d.label );
 
   simulation.on("tick", () => {
     node
@@ -342,7 +353,7 @@ function renderGraph() {
 
   });
 
-  invalidation.then(() => simulation.stop());
+  // invalidation.then(() => simulation.stop());
 }
 
 let renderMode = 'table';
@@ -384,10 +395,10 @@ function render() {
       renderTable();
     }
   } else if (renderMode === 'graph') {
-    if (rawResponseData.head.vars.includes('s') && rawResponseData.head.vars.includes('p') && rawResponseData.head.vars.includes('o')) {
+    if (rawResponseData.head.vars.length > 1) {
       renderGraph();
     } else {
-      flashMessage('Could not render Force Directed graph. Missing variables "s-p-o".');
+      flashMessage('Could not render Force Directed graph. Response data needs more than one column.');
       renderTable();
     }
   } else {
