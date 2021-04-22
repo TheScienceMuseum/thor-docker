@@ -286,13 +286,28 @@ function renderGraph() {
 
   zoom_handler(svg);  
 
+  group.append('defs').append('marker')
+    .attr("id",'arrowhead')
+    .attr('viewBox','-0 -5 10 10') //the bound of the SVG viewport for the current SVG fragment. defines a coordinate system 10 wide and 10 high starting on (0,-5)
+     .attr('refX',radius) // x coordinate for the reference point of the marker. If circle is bigger, this need to be bigger.
+     .attr('refY',0)
+     .attr('orient','auto')
+        .attr('markerWidth',13)
+        .attr('markerHeight',13)
+        .attr('xoverflow','visible')
+    .append('svg:path')
+    .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+    .attr('fill', '#999')
+    .style('stroke','none');
+
   const link = group
       .selectAll("line")
       .data(links)
       .join("line")
       .attr("stroke", "#000")
       .attr("stroke-opacity", 0.6)
-      .attr("stroke-width", 1);
+      .attr("stroke-width", 1)
+      .attr("marker-end", "url(#arrowhead)");
   //    .attr("stroke-width", d => Math.sqrt(d.value));
 
   const node = group.selectAll(".node")
