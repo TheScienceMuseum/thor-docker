@@ -253,7 +253,7 @@ function renderGraph() {
   const data = transformDataForGraph(rawResponseData);
 
   const width = window.innerWidth;
-  const height = 500;
+  const height = 700;
   const radius = 60;
   const ellipseWidth = radius * 1.5;
   const ellipseHeight = radius / 2.5;
