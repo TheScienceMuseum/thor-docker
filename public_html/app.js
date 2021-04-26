@@ -235,7 +235,7 @@ function renderGraph() {
                         source: row[dataFirstColumn].value,
                         target: nodeId
                     };
-                    if (row.edgeLabel.value) {
+                    if (row.edgeLabel) {
                       if (row.edgeLabel.value.startsWith("http")) {
                         link.label = getURIMarkup(yasqe, row.edgeLabel.value).innerText;
                       } else {
