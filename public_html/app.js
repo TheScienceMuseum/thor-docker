@@ -220,6 +220,9 @@ function renderGraph() {
         for (const [col_idx, col] of dataColumns.entries()) {
             if (!col.includes("Label")) {
                 var nodeLabel = (row[col + "Label"]) ? row[col + "Label"].value : row[col].value
+                if (nodeLabel.startsWith("http")) {
+                  nodeLabel = getURIMarkup(yasqe, nodeLabel).innerText;
+                }
                 var nodeId = row[col].value
                 var node = {
                     id: nodeId,
@@ -233,7 +236,11 @@ function renderGraph() {
                         target: nodeId
                     };
                     if (row.edgeLabel.value) {
-                      link.label = getURIMarkup(yasqe, row.edgeLabel.value).innerText;
+                      if (row.edgeLabel.value.startsWith("http")) {
+                        link.label = getURIMarkup(yasqe, row.edgeLabel.value).innerText;
+                      } else {
+                        link.label = row.edgeLabel.value;
+                      }
                     }
                     links.push(link);
     
