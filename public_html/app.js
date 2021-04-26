@@ -242,7 +242,22 @@ function renderGraph() {
                         link.label = row.edgeLabel.value;
                       }
                     }
-                    links.push(link);
+                    
+                    // to accommodate for where there are two triples (s, p1, o) and (s, p2, o), we get all the 
+                    // links with the same source and target from `links`. If there is one, we give it a new
+                    // label of 'p1 & p2', or either p1 or p2 if one predicate is not labelled.
+                    const linkInLinks = links.filter(d => d.source === link.source && d.target === link.target)
+                    if (linkInLinks.length) {
+                      const linkIndex = links.indexOf(linkInLinks[0])
+                      var newLink = {
+                        source: link.source,
+                        target: link.target,
+                        label: (linkInLinks[0].label ? linkInLinks[0].label + ' & ' : '' || '') + (link.label || '')
+                      }
+                      links[linkIndex] = newLink;
+                    } else {
+                      links.push(link);
+                    }
     
                     if (!nodes[nodeId]) {
                         // create a new node if it doesn't exist
@@ -285,7 +300,7 @@ function renderGraph() {
       .force("center", d3.forceCenter(width / 4, height / 2))
       .force("x", d3.forceX([width/2]).strength(0.01))
       .force("y", d3.forceY([height/2]).strength(0.15))
-      .alphaTarget(0);
+      .alphaTarget(0.01);
     
   const svg = d3.select('#resultContainer').append('svg')
   // .attr('width', width)
@@ -381,7 +396,7 @@ function renderGraph() {
 
   function dragended(d) {
     if (!d3.event.active) {
-      simulation.alphaTarget(0)
+      simulation.alphaTarget(0.01)
     }
   }
 

@@ -541,7 +541,19 @@ function transformDataForGraph (rawResponseData) {
                     if (row.edgeLabel.value) {
                       link.label = row.edgeLabel.value
                     }
-                    links.push(link);
+                    
+                    const linkInLinks = links.filter(d => d.source === link.source && d.target === link.target)
+                    if (linkInLinks.length) {
+                      const linkIndex = links.indexOf(linkInLinks[0])
+                      var newLink = {
+                        source: link.source,
+                        target: link.target,
+                        label: (linkInLinks[0].label ? linkInLinks[0].label + ' & ' : '' || '') + (link.label || '')
+                      }
+                      links[linkIndex] = newLink;
+                    } else {
+                      links.push(link);
+                    }
     
                     if (!nodes[nodeId]) {
                         // create a new node if it doesn't exist
