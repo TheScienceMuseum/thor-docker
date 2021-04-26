@@ -232,6 +232,9 @@ function renderGraph() {
                         source: row[dataFirstColumn].value,
                         target: nodeId
                     };
+                    if (row.edgeLabel.value) {
+                      link.label = getURIMarkup(yasqe, row.edgeLabel.value).innerText;
+                    }
                     links.push(link);
     
                     if (!nodes[nodeId]) {
@@ -312,6 +315,36 @@ function renderGraph() {
       .attr("stroke-width", 1)
       .attr("marker-end", "url(#arrowhead)");
   //    .attr("stroke-width", d => Math.sqrt(d.value));
+
+  link.append("title")
+      .text(function (d) {return "link text";});
+
+  edgepaths = group.selectAll(".edgepath")
+    .data(links)
+    .enter()
+    .append('path')
+    .attr('class', 'edgepath')
+    .attr('fill-opacity', 0)
+    .attr('stroke-opacity', 0)
+    .attr('id', function (d, i) {return 'edgepath' + i})
+    .style("pointer-events", "none");
+
+  edgelabels = group.selectAll(".edgelabel")
+    .data(links)
+    .enter()
+    .append('text')
+    .style("pointer-events", "none")
+    .attr('class', 'edgelabel')
+    .attr('id', function (d, i) {return 'edgelabel' + i})
+    .attr('font-size', 12)
+    .attr('fill', '#aaa');
+    
+  edgelabels.append('textPath')
+    .attr('xlink:href', function (d, i) {return '#edgepath' + i})
+    .style("text-anchor", "middle")
+    .style("pointer-events", "none")
+    .attr("startOffset", "50%")
+    .text(function (d) {return d.label || ''});
 
   const node = group.selectAll(".node")
       .data(nodes)
@@ -404,6 +437,23 @@ function renderGraph() {
         .attr("y1", d => d.source.y)
         .attr("x2", d => d.target.x)
         .attr("y2", d => d.target.y);
+
+    edgepaths.attr('d', function (d) {
+        return 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y;
+    });
+
+    edgelabels.attr('transform', function (d) {
+        if (d.target.x < d.source.x) {
+            var bbox = this.getBBox();
+
+            rx = bbox.x + bbox.width / 2;
+            ry = bbox.y + bbox.height / 2;
+            return 'rotate(180 ' + rx + ' ' + ry + ')';
+        }
+        else {
+            return 'rotate(0)';
+        }
+    })
 
   });
 
