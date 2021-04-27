@@ -35,7 +35,7 @@
       "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n PREFIX wdt:  <http://www.wikidata.org/prop/direct/>\n PREFIX wd:  <http://www.wikidata.org/entity/>\n PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n PREFIX sdo: <https://schema.org/>\n \n SELECT ?collection (COUNT(?item) AS ?count) WHERE {\n   ?item skos:hasTopConcept 'OBJECT'.\n   ?item owl:sameAs ?wdItem.\n   ?item sdo:isPartOf ?collection.\n } GROUP BY ?collection ORDER BY DESC(?count)"
     },
     {
-      "title": "Most occurring Wikidata pages in the graph, by count",
+      "title": "Most frequently occurring Wikidata pages in the graph, by count",
       "tags": ["wikidata"],
       "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX sdo: <https://schema.org/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX smgp: <https://collection.sciencemuseumgroup.org.uk/people/>\nPREFIX smgo: <https://collection.sciencemuseumgroup.org.uk/objects/>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX hc: <http://www.heritageconnector.org/RDF/>\n\nSELECT ?o ?edgeLabel (COUNT(?o) AS ?oCount) WHERE {  \n  ?s ?edgeLabel ?o.\n  FILTER (?edgeLabel NOT IN (rdf:type, sdo:gender)).\n  FILTER (regex(str(?o), \"wikidata\")).\n} GROUP BY ?o ?edgeLabel ORDER BY DESC(?oCount) LIMIT 100"
     },
