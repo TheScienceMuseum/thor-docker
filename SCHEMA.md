@@ -19,8 +19,9 @@
  RDF Predicate | Usage       | Notes |
 | ----------- | ----------- | ----------- |
 | `rdf:type` | Type of item | Corresponds to Wikidata [WDT.P31](https://www.wikidata.org/wiki/Property:P31) | 
-| `skos:hasTopConcept` | The record type used in the orignal collection | ie. OBJECT, PERSON or ORGANISATION
+| `skos:hasTopConcept` | The record type used in the orignal collection | one of `OBJECT, PERSON, ORGANISATION, DOCUMENT, JOURNAL_ARTICLE, BLOG_POST` |
 | `owl:sameAs` | Used to express equivalance between records | used to link to external Wikidata entries | 
+| `hc.database` | Whether the record exists in Adlib or Mimsy | Relevant mainly for people and organisations, as they can exist in either database | 
 
 ## Custom HC Namespace (NER)
 
@@ -33,7 +34,7 @@ Used to express links/terms discocvered by NER (Named Entity Recognition) in a r
 | `hc:entityNORP` | Nationality | A nationality identified by NER | 
 | `hc:entityFAC` | Facility | A building or facility identified by NER | 
 | `hc:entityLOC` | Place | A geographical location or country identified by NER | 
-| `hc:entityOBJECT` | Object | | 
+| `hc:entityOBJECT` | Object | A product or work of art identified by NER | 
 | `hc:entityLANGUAGE` | Language | A language identified by NER | 
 | `hc:entityDATE` | Date | A date or year identified by NER | 
 
@@ -77,6 +78,38 @@ Used to express links/terms discocvered by NER (Named Entity Recognition) in a r
 | Materials | `sdo:material` | [WDT.P186](https://www.wikidata.org/wiki/Property:P186) | |
 | Date made| `sdo:dateCreated` | [WDT.P571](https://www.wikidata.org/wiki/Property:P571) | |
 | SMG Category | `sdo:isPartOf` | | |
+
+## Archival document
+
+| Field       | Primary RDF Predicate | Wikidata    | Notes |
+| ----------- | ----------- | ----------- | ----------- | 
+| Title | `rdfs:label` | | |
+| Description | `xsd.description` | | |
+
+## Journal article
+
+| Field       | Primary RDF Predicate | Wikidata    | Notes |
+| ----------- | ----------- | ----------- | ----------- | 
+| DOI | `sdo:identifier` | | |
+| Author | `sdo:author` | | |
+| Title | `rdfs:label` | | |
+| Issue | `sdo:isPartOf` | | |
+| Keywords | `sdo:genre` | | |
+| Tags | `sdo:keywords` | | |
+
+## Blog post
+
+| Field       | Primary RDF Predicate | Wikidata    | Notes |
+| ----------- | ----------- | ----------- | ----------- | 
+| Date | `sdo:dateCreated` | | |
+| Author | `sdo:author` | | |
+| Title | `rdfs:label` | | |
+| Issue | `sdo:isPartOf` | | |
+| Categories | `sdo:genre` | | |
+| Tags | `sdo:keywords` | | |
+| Hyperlinks | `sdo.mentions` | | Hyperlinks in a blog post to other blogs, collection pages or Wikipedia. |
+
+
 
 
 

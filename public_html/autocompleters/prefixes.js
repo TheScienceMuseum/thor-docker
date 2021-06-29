@@ -24,6 +24,7 @@ const commonNamespaces = [
   'xsd: <http://www.w3.org/2001/XMLSchema#>',
   'smgp: <https://collection.sciencemuseumgroup.org.uk/people/>',
   'smgo: <https://collection.sciencemuseumgroup.org.uk/objects/>',
+  'smgd: <https://collection.sciencemuseumgroup.org.uk/documents/>',
   'wd: <http://www.wikidata.org/entity/>',
   'wdt: <http://www.wikidata.org/prop/direct/>',
   'hc: <http://www.heritageconnector.org/RDF/>',
