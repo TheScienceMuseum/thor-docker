@@ -73,6 +73,11 @@
       "title": "People's place of birth and their Lat Longs",
       "tags": ["Wikidata"],
       "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n PREFIX wdt:  <http://www.wikidata.org/prop/direct/>\n PREFIX wd:  <http://www.wikidata.org/entity/>\n PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n \n SELECT ?item ?itemLabel ?wdItem ?wdItemlabel ?wdPlaceofBirth ?wdPlaceofBirthLabel ?wdLatLong WHERE {\n   ?item skos:hasTopConcept 'PERSON'.\n   ?item owl:sameAs ?wdItem.\n   ?item rdfs:label ?itemLabel.\n   \n   SERVICE <https://query.wikidata.org/sparql> {\n     ?wdItem rdfs:label ?wdItemlabel.\n     FILTER(LANG(?wdItemlabel) = \"en\").\n       ?wdItem wdt:P19 ?wdPlaceofBirth.\n       ?wdPlaceofBirth rdfs:label ?wdPlaceofBirthLabel.\n       ?wdPlaceofBirth wdt:P625 ?wdLatLong.}.\n       FILTER(LANG(?wdPlaceofBirthLabel) = \"en\").\n\n    \n } LIMIT 200"
+    },
+    {
+      "title": "Women mentioned in records about men",
+      "tags": ["bias"],
+      "body": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX sdo: <https://schema.org/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX smgp: <https://collection.sciencemuseumgroup.org.uk/people/>\nPREFIX smgo: <https://collection.sciencemuseumgroup.org.uk/objects/>\nPREFIX smgd: <https://collection.sciencemuseumgroup.org.uk/documents/>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX hc: <http://www.heritageconnector.org/RDF/>\nSELECT ?s ?sLabel ?o ?oLabel WHERE{  \n  ?s hc:entityPERSON ?o.\n  ?s sdo:gender wd:Q6581097.\n  ?o wdt:P21 wd:Q6581072.\n  ?s rdfs:label ?sLabel. \n  OPTIONAL {?o rdfs:label ?oLabel}.\n} "
     }
 ]
 
