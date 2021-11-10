@@ -2,6 +2,29 @@ YASQE.defaults.sparql.showQueryButton = false;
 YASQE.defaults.value = '';
 YASQE.defaults.autocompleters = ['prefixes', 'customPropertyCompleter', 'customClassCompleter', 'customUrisCompleter', 'customServicesCompleter', 'variables'];
 
+// get endpoint and init
+
+function closeAndSetEndpointModal() {
+  const endpoint = document.querySelector('#endpointInput').value;
+  localStorage.setItem('endpoint', endpoint);
+  yasqe.options.sparql.endpoint = localStorage.getItem('endpoint');
+  window.location.hash = '';
+}
+
+function setEndpoint(endpoint) {
+  localStorage.setItem('endpoint', endpoint);
+  yasqe.options.sparql.endpoint = localStorage.getItem('endpoint');
+}
+
+// // Manually set / overide the endpoint for use with Heritage Connector Fuseki instance
+// localStorage.setItem('endpoint', 'http://63.33.68.17:8080');
+
+if (localStorage.getItem('endpoint') !== null) {
+  YASQE.defaults.sparql.endpoint = localStorage.getItem('endpoint');
+} else {
+  window.location.hash = 'endpoint-modal';
+}
+
 let rawResponseData;
 YASQE.defaults.sparql.callbacks.success = data => {
   document.querySelector('#queryLoadingIndicator').style.display = 'none';
@@ -569,24 +592,6 @@ function setupQueryLibrary() {
   });
 }
 setupQueryLibrary();
-
-// get endpoint and init
-
-function closeAndSetEndpointModal() {
-  const endpoint = document.querySelector('#endpointInput').value;
-  localStorage.setItem('endpoint', endpoint);
-  yasqe.options.sparql.endpoint = localStorage.getItem('endpoint');
-  window.location.hash = '';
-}
-
-// Manually set / overide the endpoint for use woith Heritage Connector Fuseki instance
-localStorage.setItem('endpoint', 'http://63.33.68.17:8080');
-
-if (localStorage.getItem('endpoint') !== null) {
-  YASQE.defaults.sparql.endpoint = localStorage.getItem('endpoint');
-} else {
-  window.location.hash = 'endpoint-modal';
-}
 
 var yasqe = YASQE(document.getElementById('queryEditor'));
 
