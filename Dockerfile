@@ -1,7 +1,13 @@
-# Basic Thor Dockerfile.
+FROM node:16-alpine3.11
 
-FROM nginx:latest
+WORKDIR /usr/app
 
-LABEL maintainer="Science Musuem Group"
+ARG SPARQL_ENDPOINT
+ENV SPARQL_ENDPOINT $SPARQL_ENDPOINT
 
-COPY public_html /usr/share/nginx/html
+COPY . .
+
+RUN npm install -g http-server
+RUN node index.js
+
+CMD http-server ./public_html -p 80
